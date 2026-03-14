@@ -1,6 +1,6 @@
 {
-  "buildCommand": "BASE_PATH=/ pnpm --filter @workspace/code-editor run build",
-  "outputDirectory": "artifacts/code-editor/dist/public",
+  "buildCommand": "BASE_PATH=/ pnpm --filter @workspace/code-editor run build && cp -r artifacts/code-editor/dist/public ./public",
+  "outputDirectory": "public",
   "installCommand": "pnpm install",
   "framework": null,
   "rewrites": [
