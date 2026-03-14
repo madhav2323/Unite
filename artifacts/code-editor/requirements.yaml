@@ -1,0 +1,15 @@
+packages:
+  "@monaco-editor/react": "Monaco editor for the core code editing experience"
+  "socket.io-client": "Real-time bidirectional event-based communication for collaboration"
+  "react-resizable-panels": "IDE-like resizable layout for the editor and tools"
+  "date-fns": "For formatting timestamps in chat and version history"
+  "framer-motion": "For polished modal animations and transitions"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility function to efficiently merge Tailwind CSS classes"
+  "lucide-react": "Beautiful, consistent icons for the UI"
+  "uuid": "For generating unique user IDs for the session"
+
+notes:
+  - "The Socket.IO client will connect to the same origin (window.location.origin)."
+  - "Assuming the backend handles real-time cursor broadcasting and code syncing via standard socket events."
+  - "UI is highly inspired by modern code editors (VS Code) with a deep dark theme."

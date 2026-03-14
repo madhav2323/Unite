@@ -1,0 +1,105 @@
+You are an experienced software architect tasked with outlining the implementation of new features for the **Unite** real-time collaborative code editor. Unite currently utilizes a Node.js + Express + Socket.IO backend, a React + Vite + Tailwind frontend, and Monaco Editor for code editing. Workspace data is stored in-memory. Your task is to detail the implementation of the following features, focusing on clear specifications for development.
+
+## 1. Local & Global Workspaces
+
+Implement two levels of coding environments within each workspace: **Local Workspace** (private per user) and **Global Workspace** (shared).
+
+*   **Local Workspace:**
+    *   Each user joining a workspace automatically receives a private Local Workspace.
+    *   Visibility: Default access is restricted to the workspace Owner/Admin and the Local Workspace owner.
+    *   Admin Override: The Owner/Admin can view all users' Local Workspaces.
+*   **Global Workspace:**
+    *   Shared editing space for all workspace members.
+    *   Editing requires explicit Admin approval.
+
+## 2. Local Workspace Access Requests
+
+Implement a permission system for accessing other users' Local Workspaces.
+
+*   **Request Flow:** User B requests access to User A’s Local Workspace via a "Request Access" button.
+*   **Notification:** User A receives a notification with "Accept as Editor," "Accept as Viewer," and "Reject" options.
+*   **Permissions:**
+    *   Viewer: Read-only access to code.
+    *   Editor: Read and write access to code.
+*   **Denial:** Rejected requests deny access.
+*   **Real-time Editing:** Upon approval, real-time editing functions identically to the existing collaborative editor.
+
+## 3. Global Workspace Editing
+
+Implement controlled editing access for the Global Workspace.
+
+*   **Request Flow:** Users request editing permission for the Global Workspace.
+*   **Admin Approval:** Admin approves or rejects the request.
+*   **Collaboration:** Upon approval, the user can edit the Global Workspace code with real-time collaboration (Google Docs style cursors and names).
+
+## 4. "Post to Global" Workflow
+
+Implement a feature to publish code from Local Workspaces to the Global Workspace.
+
+*   **Initiation:** User clicks "Request Post to Global Workspace" in their Local Workspace.
+*   **Admin Review:** Admin receives a request including:
+    *   User Name
+    *   Code Preview
+    *   Accept/Reject options
+*   **Approval:** Upon approval:
+    *   The user’s Local Workspace code becomes the new version of the Global Workspace code.
+    *   A new entry is automatically created in the Version History (see section 5).
+
+## 5. Version History Updates
+
+Update the Version History to reflect changes to the Global Workspace.
+
+*   **Triggers:** Create a new version snapshot when:
+    *   Code is posted from a Local Workspace to the Global Workspace.
+    *   A user edits the Global Workspace with Admin permission and saves.
+*   **Version Entry Data:** Each entry must include:
+    *   Version ID
+    *   User Name
+    *   Timestamp
+    *   Code Snapshot
+*   **Restore Behavior:**
+    *   Users can only restore versions *to their own Local Workspace*. Direct restoration to the Global Workspace is prohibited.
+
+## 6. Global Chat Implementation
+
+Add a workspace-wide Global Chat system.
+
+*   **Message Format:** Messages must include Sender Name, Timestamp, and Message Text.
+*   **Real-time Synchronization:** Utilize Socket.IO for real-time message synchronization.
+*   **Persistence:** Persist messages in memory to display previous messages to new users joining the workspace.
+*   **UI:** Implement a dedicated Global Chat tab or panel.
+
+## 7. Synchronization via Socket.IO
+
+Ensure all new features maintain real-time behavior using Socket.IO events.
+
+*   **Events:** Utilize Socket.IO events for:
+    *   Local Workspace updates
+    *   Access requests
+    *   Global Workspace edits
+    *   Post-to-Global requests
+    *   Admin approvals
+    *   Version creation
+    *   Global Chat messages
+*   **Propagation:** All changes must propagate instantly to connected clients.
+
+## 8. UI Component Integration
+
+Integrate the following UI components:
+
+*   Local Workspace Panel
+*   Global Workspace Panel
+*   Request Access Button
+*   Request Post to Global Button
+*   Admin Approval Popup
+*   Global Chat Panel
+*   **Workspace Switching:** Implement tabs or a workspace switcher for selecting between Local and Global Workspaces.
+
+## 9. Architectural Constraints
+
+Maintain the existing system architecture:
+
+*   **Frontend:** React + Vite + Tailwind + Monaco Editor + xterm.js
+*   **Backend:** Node.js + Express + Socket.IO
+*   **Storage:** In-memory workspace objects
+*   **Modularity:** Maintain code modularity and compatibility with the current workspace system.

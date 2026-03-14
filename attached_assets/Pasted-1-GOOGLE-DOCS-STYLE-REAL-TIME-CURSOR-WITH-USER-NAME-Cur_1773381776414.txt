@@ -1,0 +1,247 @@
+1: GOOGLE DOCS STYLE REAL-TIME CURSOR WITH USER NAME
+
+Currently cursor tracking exists but it should behave like Google Docs live cursors.
+
+Requirements:
+
+Each user's cursor must display:
+
+A colored vertical cursor
+
+A floating label above it showing the username
+
+Cursor updates must broadcast via Socket.IO whenever:
+
+cursor position changes
+
+selection changes
+
+typing occurs
+
+The cursor label should:
+
+show the username
+
+use the user's assigned color
+
+appear above the cursor
+
+disappear if the user disconnects
+
+Cursor updates must be throttled (about 30ms) to avoid flooding the server.
+
+When a new user joins:
+
+existing cursor positions must sync automatically.
+
+Use Monaco editor APIs such as:
+
+editor.onDidChangeCursorPosition
+editor.deltaDecorations
+
+Store remote cursors in a client-side map:
+
+remoteCursors = {
+socketId: {
+username,
+color,
+position
+}
+}
+
+Render cursors using Monaco decorations.
+
+The result must look similar to Google Docs collaborative cursors.
+
+FEATURE 2: WORKSPACE SYSTEM (CREATE / JOIN WORKSPACE)
+
+Currently all users join a default room called "main".
+
+Replace this with a workspace-based collaboration system.
+
+Create a Home Page before entering the editor.
+
+Home Page UI:
+
+Two buttons:
+
+1️⃣ Create Workspace
+2️⃣ Join Workspace
+
+Use TailwindCSS for styling.
+
+CREATE WORKSPACE FLOW
+
+When a user clicks Create Workspace:
+
+Ask for:
+
+Username
+
+Workspace Name
+
+Backend should:
+
+Generate a unique workspace code:
+
+Example:
+WS-4F92KD
+
+Store workspace in memory:
+
+workspaces = {
+workspaceCode: {
+ownerSocketId,
+workspaceName,
+users: [],
+pendingRequests: []
+}
+}
+
+The creator automatically becomes:
+
+role: "editor"
+isOwner: true
+
+Redirect the creator to:
+
+/workspace/
+
+Display the workspace code so others can join.
+
+JOIN WORKSPACE FLOW
+
+When user clicks Join Workspace:
+
+Ask for:
+
+• Username
+• Workspace Code
+
+When submitted:
+
+Send join request to server via Socket.IO.
+
+The request should go into:
+
+workspace.pendingRequests
+
+Notify the workspace owner.
+
+OWNER APPROVAL SYSTEM
+
+When someone requests to join:
+
+The workspace owner sees a popup:
+
+"User Rahul wants to join workspace"
+
+Buttons:
+
+[ Accept as Editor ]
+[ Accept as Viewer ]
+[ Reject ]
+
+ROLES
+
+Editor:
+• Can edit code
+• Can run code
+• Can save versions
+
+Viewer:
+• Can only watch code changes
+• Cannot edit
+• Cannot run code
+
+Implementation:
+
+If viewer:
+
+editor.updateOptions({
+readOnly: true
+})
+
+REAL-TIME REQUIREMENTS
+
+All of the following must remain real-time using Socket.IO:
+
+• Code edits
+• Cursor movements
+• Chat messages
+• Language switching
+• Workspace join notifications
+• User approvals
+• Role updates
+
+SOCKET EVENTS REQUIRED
+
+createWorkspace
+joinWorkspaceRequest
+workspaceJoinRequest
+workspaceJoinApproved
+workspaceJoinRejected
+workspaceUserJoined
+workspaceUserLeft
+cursorMove
+codeChange
+chatMessage
+
+WORKSPACE ROOM STRUCTURE
+
+Instead of "main":
+
+socket.join(workspaceCode)
+
+All collaboration events must emit to:
+
+io.to(workspaceCode)
+
+DISCONNECT HANDLING
+
+When a user disconnects:
+
+• Remove them from workspace users
+• Remove their cursor
+• Notify other users
+
+UI PANELS UPDATE
+
+Active Users panel should show:
+
+Username
+Role (Editor / Viewer)
+Color indicator
+
+Example:
+
+Rahul (Editor)
+Anita (Viewer)
+
+IMPORTANT DEVELOPMENT RULES
+
+Do NOT remove any existing features.
+
+Maintain compatibility with the current Socket.IO system.
+
+Ensure all new features work in real time.
+
+Do not introduce breaking changes.
+
+Follow clean modular architecture.
+
+Avoid memory leaks or socket duplication.
+
+Handle reconnection safely.
+
+FINAL RESULT
+
+The application should now support:
+
+• Google Docs style cursor labels
+• Workspace creation
+• Workspace joining via code
+• Owner approval system
+• Viewer / Editor roles
+• Fully real-time collaboration
+• All existing features still working

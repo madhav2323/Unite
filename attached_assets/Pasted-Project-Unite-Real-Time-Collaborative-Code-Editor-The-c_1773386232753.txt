@@ -1,0 +1,124 @@
+Project: **Unite — Real-Time Collaborative Code Editor**
+
+The current system already includes workspaces, Monaco editor, roles (Owner / Editor / Viewer), version history, chat, and real-time collaboration using React + Vite + Tailwind on the frontend and Node.js + Express + Socket.IO on the backend.
+
+Update the existing system with the following changes only.
+
+---
+
+1. **Admin-Approval Based Version History**
+
+Modify the current "Save Version" functionality so that versions are not immediately saved.
+
+New workflow:
+
+• Only users with the **Editor role** can request to save a version.
+• When an Editor clicks **Save Version**, a **version save request** is sent to the **Owner/Admin** instead of saving directly.
+• The Owner/Admin should receive a **popup notification** or request panel showing:
+
+* Editor name
+* Timestamp
+* Code preview (optional)
+* Approve / Reject buttons.
+
+If the Owner clicks **Approve**:
+
+* The current code should be saved as a new version.
+* The version should be stored as a **separate file** in the version history system.
+* The saved version entry must include:
+
+  * Editor name
+  * Timestamp
+  * Version ID
+  * Code snapshot.
+
+If the Owner clicks **Reject**:
+
+* The version request is discarded.
+* Notify the editor that their version request was rejected.
+
+Additional requirements:
+
+• Version history panel must display:
+
+* Version number
+* Editor name who proposed the change
+* Approval timestamp
+  • Any approved version can still be **restored** by the Owner or Editors.
+  • Version approval events should sync across all users using **Socket.IO**.
+
+---
+
+2. **Global User Chat (Friendly Discussion Chat)**
+
+Add a new **Global Chat Panel** separate from the existing team chat.
+
+Purpose:
+Allow all members of the workspace to communicate freely (like a discussion chat).
+
+Requirements:
+
+• Each message must show:
+
+* Sender name
+* User color/avatar
+* Timestamp
+  • Messages should update in **real-time using Socket.IO**.
+  • Messages should be visible to **all members in the workspace**.
+  • Chat should support:
+* basic text messages
+* enter-to-send
+  • Store recent messages temporarily in server memory or database so new users joining can see previous messages.
+
+UI placement suggestion:
+Add a **Global Chat tab** or panel beside the existing Team Chat.
+
+---
+
+3. **Application Branding Update**
+
+Update the application name everywhere in the UI to:
+
+**Unite**
+
+This includes:
+
+* Landing page title
+* Header / Navbar
+* Workspace header
+* Browser tab title
+* Any references to the previous name.
+
+---
+
+4. **Technical Constraints**
+
+Use the existing stack and architecture:
+
+Frontend:
+React + Vite + Tailwind + Monaco Editor + React Context
+
+Backend:
+Node.js + Express + Socket.IO
+
+Real-time communication:
+Socket.IO events
+
+Maintain existing roles:
+Owner / Editor / Viewer
+
+Ensure:
+• role permissions are enforced
+• version approval requests sync across clients
+• chat updates in real time.
+
+---
+
+Deliverables:
+
+1. Backend logic for version approval workflow
+2. New Socket.IO events for version requests and approvals
+3. UI components for admin approval popup
+4. Updated version history structure
+5. Global chat implementation
+6. Branding update to **Unite**

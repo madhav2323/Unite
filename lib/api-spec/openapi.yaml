@@ -1,0 +1,182 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: Real-Time Collaborative Code Editor API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: code
+    description: Code execution
+  - name: versions
+    description: Version control
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /run:
+    post:
+      operationId: executeCode
+      tags: [code]
+      summary: Execute code
+      description: Execute code in the specified language
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExecuteCodeRequest"
+      responses:
+        "200":
+          description: Code execution result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExecuteCodeResponse"
+  /versions:
+    get:
+      operationId: getVersions
+      tags: [versions]
+      summary: Get all versions
+      description: Returns list of saved code versions
+      responses:
+        "200":
+          description: List of versions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Version"
+    post:
+      operationId: saveVersion
+      tags: [versions]
+      summary: Save a version
+      description: Save a snapshot of the current code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveVersionRequest"
+      responses:
+        "201":
+          description: Version saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Version"
+  /versions/{id}:
+    get:
+      operationId: getVersion
+      tags: [versions]
+      summary: Get a specific version
+      description: Returns a specific version by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Version found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Version"
+        "404":
+          description: Version not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    ExecuteCodeRequest:
+      type: object
+      properties:
+        language:
+          type: string
+          enum: [python, java, cpp, c]
+        code:
+          type: string
+      required:
+        - language
+        - code
+    ExecuteCodeResponse:
+      type: object
+      properties:
+        output:
+          type: string
+        error:
+          type: string
+        exitCode:
+          type: number
+      required:
+        - output
+        - exitCode
+    Version:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        code:
+          type: string
+        language:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        label:
+          type: string
+      required:
+        - id
+        - username
+        - code
+        - language
+        - timestamp
+    SaveVersionRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        code:
+          type: string
+        language:
+          type: string
+        label:
+          type: string
+      required:
+        - username
+        - code
+        - language
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error

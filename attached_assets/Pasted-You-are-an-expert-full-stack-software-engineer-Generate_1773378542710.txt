@@ -1,0 +1,443 @@
+You are an expert full-stack software engineer.
+Generate a complete production-ready web application for a Real-Time Collaborative Code Editor that runs on Replit.
+
+The application must allow multiple users to edit the same code simultaneously, run code, track versions, and collaborate in real time.
+
+Follow the architecture and specifications below.
+
+1. Project Overview
+
+Build a web-based Real-Time Collaborative Code Editor where multiple developers can:
+
+• Write code together in real time
+• See each other’s cursor positions
+• Execute code in different languages
+• View version history
+• Chat with collaborators
+
+The system should maintain synchronization, security, and performance.
+
+The project must be deployable on Replit.
+
+2. Tech Stack
+
+Use the following technologies:
+
+Frontend
+
+HTML
+
+CSS
+
+JavaScript
+
+Monaco Editor (VS Code editor)
+
+Optional but preferred:
+
+React.js (for component architecture)
+
+Backend
+
+Node.js
+
+Express.js
+
+Real-time Communication
+
+Socket.IO (WebSockets)
+
+Code Execution
+
+Use backend execution using child_process or Replit environment.
+
+Languages supported:
+
+Python
+
+Java
+
+C++
+
+C
+
+Version Tracking
+
+Use:
+
+In-memory storage using JavaScript objects
+
+Optional JSON file persistence
+
+3. Project Folder Structure
+
+Create the project with this structure:
+
+realtime-code-editor
+│
+├── server
+│   ├── server.js
+│   ├── socket.js
+│   ├── executor.js
+│   └── versionControl.js
+│
+├── public
+│   ├── index.html
+│   ├── style.css
+│   ├── client.js
+│
+├── package.json
+├── README.md
+4. Core Features
+
+Implement the following features.
+
+4.1 Real-Time Collaborative Editing
+
+Use Socket.IO to broadcast editor changes.
+
+Workflow:
+
+1 User types in editor
+2 Client emits codeChange event
+3 Server receives update
+4 Server broadcasts update to all connected clients
+
+Latency should be under 200ms.
+
+Use server-authoritative synchronization model.
+
+4.2 Monaco Code Editor Integration
+
+Embed Monaco Editor inside the browser.
+
+Features required:
+
+syntax highlighting
+
+auto indentation
+
+line numbers
+
+code completion
+
+multi-language support
+
+Languages supported:
+
+Python
+
+Java
+
+C++
+
+C
+
+Add a language selector dropdown.
+
+4.3 Multi-user Collaboration
+
+Display:
+
+Active Users List
+
+Example UI:
+
+Active Users:
+• Madhav
+• Harsh
+• Rohit
+
+Features:
+
+unique cursor color per user
+
+cursor position sharing
+
+typing indicators
+
+4.4 Real-Time Cursor Tracking
+
+Each user should broadcast:
+
+cursor position
+username
+color
+
+Display other users' cursors using Monaco decorations.
+
+4.5 Code Execution System
+
+Add Run Code button.
+
+Backend must execute code safely.
+
+Execution commands:
+
+Python
+
+python main.py
+
+Java
+
+javac Main.java
+java Main
+
+C++
+
+g++ main.cpp -o main
+./main
+
+C
+
+gcc main.c -o main
+./main
+
+Capture:
+
+stdout
+
+stderr
+
+Display output in:
+
+Output Console Panel
+
+Add 10 second timeout to avoid infinite loops.
+
+4.6 Version Control System
+
+Implement basic version tracking.
+
+Save code snapshot:
+
+• every 60 seconds
+• when user clicks Save Version
+
+Store:
+
+timestamp
+username
+code snapshot
+
+Add:
+
+Version History Panel
+
+Example:
+
+Version 1 — 10:45 AM — Madhav
+Version 2 — 10:46 AM — Harsh
+Version 3 — 10:47 AM — Rohit
+
+Users can:
+
+view versions
+
+restore versions
+
+4.7 Chat System
+
+Add a real-time chat box.
+
+Users can send messages to collaborators.
+
+Chat uses Socket.IO.
+
+Example UI:
+
+Harsh: Fix line 10
+Madhav: Done
+Rohit: Running code now
+4.8 Active Users Panel
+
+Display:
+
+usernames
+
+connection status
+
+Example:
+
+Users Online (3)
+
+Madhav
+Harsh
+Rohit
+4.9 Security
+
+Implement:
+
+Input sanitization
+
+Prevent:
+
+command injection
+malicious scripts
+
+Add:
+
+execution timeout
+
+sandbox environment
+
+4.10 Performance
+
+Optimize for:
+
+minimal WebSocket payloads
+
+efficient broadcasting
+
+event throttling
+
+5. Frontend UI Layout
+
+Design a modern developer interface.
+
+Layout:
+
+------------------------------------------------
+| Header - Real Time Code Editor               |
+------------------------------------------------
+| Users Panel | Code Editor | Version History  |
+|             |             |                  |
+|             |             |                  |
+------------------------------------------------
+| Output Console                                   |
+------------------------------------------------
+| Chat Panel                                       |
+------------------------------------------------
+
+Add buttons:
+
+Run Code
+Save Version
+Change Language
+6. Backend APIs
+
+Implement APIs:
+
+Execute Code
+POST /run
+
+Request:
+
+{
+ language: "python",
+ code: "print('Hello')"
+}
+
+Response:
+
+{
+ output: "Hello"
+}
+7. Socket Events
+
+Implement these socket events:
+
+User Join
+
+joinRoom
+
+Code Change
+
+codeChange
+
+Cursor Move
+
+cursorMove
+
+Chat Message
+
+chatMessage
+
+User Disconnect
+
+disconnect
+8. README File
+
+Create a README containing:
+
+Project description
+
+Features
+
+Tech stack
+
+Installation
+
+npm install
+node server.js
+
+Usage instructions
+
+Architecture explanation
+
+9. Deliverables
+
+The generated project must include:
+
+Working frontend
+
+Working backend
+
+Real-time editor
+
+Code execution
+
+Chat system
+
+Version history
+
+Cursor tracking
+
+10. Additional Enhancements (Optional)
+
+If possible implement:
+
+Room-based collaboration
+
+/editor/room123
+
+Authentication
+
+username login
+
+Dark theme
+
+Autosave
+
+11. Important Constraints
+
+The project must:
+
+• Run smoothly on Replit
+• Use Node.js server
+• Use Socket.IO for collaboration
+• Use Monaco Editor
+• Handle multiple users simultaneously
+
+12. Final Instruction
+
+Generate the complete working code for all files including:
+
+server.js
+
+client.js
+
+index.html
+
+style.css
+
+executor.js
+
+versionControl.js
+
+package.json
+
+Ensure the project runs immediately after:
+
+npm install
+node server.js

@@ -1,0 +1,316 @@
+IMPORTANT RULES
+
+Do NOT rebuild the project.
+Do NOT remove existing architecture.
+Do NOT change the current Socket.IO structure.
+
+You must extend the system carefully so that everything continues working in real-time without breaking existing features.
+
+REMOVE THESE FEATURES
+
+Remove the concept of:
+
+• Local workspace
+• Global workspace
+
+There should be only one workspace created by an Admin.
+
+NEW COLLABORATION MODEL
+
+The system must work like this:
+
+Admin creates the workspace
+
+Users request to join
+
+Admin approves users
+
+Approved users join but cannot perform actions initially
+
+Admin must create a file inside the workspace
+
+Only after a file is created can users collaborate inside that file
+
+FILE-BASED COLLABORATION SYSTEM
+
+Admin can create files inside the workspace.
+
+Example files:
+main.py
+app.js
+program.cpp
+
+Users will only collaborate inside a selected file.
+
+Data structure example:
+
+workspace = {
+files: {
+fileId: {
+name,
+code,
+versionHistory
+}
+},
+users: []
+}
+
+REAL-TIME MULTI-USER EDITING
+
+Inside a file:
+
+Multiple users must be able to type simultaneously.
+
+Requirements:
+
+• Real-time typing synchronization
+• No conflicts while typing
+• Changes must appear instantly for all users
+• Cursor movement must show username on the active line
+• Similar behavior to Google Docs live editing
+
+Use Monaco Editor APIs:
+
+editor.onDidChangeCursorPosition
+editor.onDidChangeModelContent
+editor.deltaDecorations
+
+Each cursor must display:
+
+• colored caret
+• username label
+• hover line highlight
+
+Cursor info structure:
+
+remoteCursors = {
+socketId: {
+username,
+color,
+position
+}
+}
+
+SAVE PERMISSION SYSTEM
+
+Users can type and edit code.
+
+BUT
+
+Users cannot save changes directly.
+
+When a user clicks "Save":
+
+Send save request to admin
+
+Admin receives notification
+
+Admin options:
+
+Approve Save
+Reject Save
+
+Only after approval should the code be saved.
+
+VERSION HISTORY SYSTEM
+
+Each saved version should include:
+
+• timestamp
+• username
+• code snapshot
+
+Example:
+
+versionHistory = [
+{
+timestamp,
+savedBy,
+code
+}
+]
+
+Users can open a Version History panel.
+
+They should see:
+
+Version list with timestamps.
+
+Users can view old versions but cannot restore them directly.
+
+If a user wants to restore:
+
+They must send a restore request to admin.
+
+Admin decides:
+
+Approve Restore
+Reject Restore
+
+Admin can restore instantly.
+
+ROLE SYSTEM
+
+Admin:
+Full control over everything.
+
+Admin permissions:
+
+• approve users
+• create files
+• approve save requests
+• approve restore requests
+• edit code
+• run code
+• manage users
+
+Editor Users:
+
+• can edit code
+• can type in real-time
+• can request save
+• can request restore
+
+Viewers:
+
+• can only see code
+• cannot edit
+
+Use Monaco option:
+
+editor.updateOptions({
+readOnly: true
+})
+
+GLOBAL REAL-TIME CHAT
+
+Add a Global Chat Panel.
+
+Requirements:
+
+• All users can send messages
+• Messages show username
+• Messages broadcast instantly
+
+Chat structure:
+
+{
+username,
+message,
+timestamp
+}
+
+Socket event:
+
+chatMessage
+
+TERMINAL FIX
+
+The integrated terminal is currently not working.
+
+Fix the terminal so users can:
+
+• type commands
+• run commands
+• see output in real-time
+
+Terminal requirements:
+
+Use:
+
+node-pty or child_process
+
+Commands should execute in a sandboxed temporary environment.
+
+Terminal must support:
+
+• Python execution
+• C/C++ compilation
+• Node commands
+• basic shell commands
+
+Terminal output must stream back to the frontend in real time.
+
+UI DESIGN IMPROVEMENT
+
+Redesign the UI to resemble:
+
+VS Code IDE + Hacker Theme
+
+Theme features:
+
+Dark background
+Neon accents
+Code-focused layout
+
+Layout suggestion:
+
+Left Sidebar
+• Active Users
+• Files
+
+Center
+• Monaco Editor
+
+Right Sidebar
+• Version History
+
+Bottom Panel
+• Terminal
+• Chat
+
+Use TailwindCSS to implement:
+
+Dark Hacker Theme Colors
+
+Example palette:
+
+Background: #0d1117
+Panel: #161b22
+Accent: #00ff9c
+Text: #c9d1d9
+
+Add smooth hover animations.
+
+SOCKET EVENTS
+
+userJoinRequest
+userJoinApproved
+fileCreated
+codeChange
+cursorMove
+saveRequest
+saveApproved
+restoreRequest
+restoreApproved
+chatMessage
+terminalCommand
+
+All collaboration events must remain fully real-time.
+
+IMPORTANT SYSTEM REQUIREMENTS
+
+• No race conditions
+• Prevent cursor duplication
+• Handle user disconnects
+• Remove cursors when users leave
+• Ensure multi-user editing remains synchronized
+• Prevent unauthorized actions
+
+FINAL EXPECTED RESULT
+
+The updated system should support:
+
+Admin-controlled workspace
+File-based collaboration
+Real-time multi-user typing
+Cursor names on hover line
+Save permission system
+Version history with admin restore
+Working terminal
+Global real-time chat
+VS Code style hacker theme UI
+
+After implementing the changes:
+
+Show only the files that were modified or added, not the entire project.

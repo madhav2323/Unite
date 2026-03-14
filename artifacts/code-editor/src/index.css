@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-panel: hsl(var(--panel));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+}
+
+:root {
+  /* VS Code + Hacker Theme */
+  --background: 215 14% 7%;       /* #0d1117 */
+  --panel: 215 17% 11%;           /* #161b22 */
+  --foreground: 213 27% 84%;      /* #c9d1d9 */
+  
+  --border: 215 14% 15%;          /* #21262d */
+  --input: 215 17% 11%;           /* #161b22 */
+  --ring: 152 100% 50%;           /* #00ff9c */
+
+  --primary: 152 100% 50%;        /* #00ff9c neon green */
+  --primary-foreground: 0 0% 0%;  /* black */
+  
+  --secondary: 215 14% 15%;       /* #21262d */
+  --secondary-foreground: 213 27% 84%;
+  
+  --muted: 215 13% 16%;           /* #21262d */
+  --muted-foreground: 213 13% 55%; /* #8b949e */
+  
+  --accent: 152 100% 50%;         /* #00ff9c */
+  --accent-foreground: 0 0% 0%;
+  
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased overflow-hidden;
+  }
+  
+  /* Custom Scrollbar for IDE feel */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 5px;
+    border: 2px solid hsl(var(--panel));
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground));
+  }
+}
+
+/* Monaco Editor Cursor Decorations */
+.remote-cursor {
+  position: absolute;
+  width: 2px !important;
+  z-index: 10;
+}
+.remote-cursor-flag {
+  position: absolute;
+  top: -18px;
+  left: -2px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  color: white;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 11;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.remote-cursor:hover .remote-cursor-flag {
+  opacity: 1;
+}
+
+/* React Resizable Panels Handles */
+.resize-handle {
+  position: relative;
+  outline: none;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+}
+.resize-handle[data-panel-group-direction="horizontal"] {
+  width: 4px;
+  margin: 0 -2px;
+  cursor: col-resize;
+  z-index: 20;
+}
+.resize-handle[data-panel-group-direction="vertical"] {
+  height: 4px;
+  margin: -2px 0;
+  cursor: row-resize;
+  z-index: 20;
+}
+.resize-handle:hover, .resize-handle[data-resize-handle-state="drag"] {
+  background-color: hsl(var(--primary) / 0.5);
+}
