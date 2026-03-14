@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, XCircle, FileCode, ChevronDown, ChevronUp } from "lucide-react";
-import { VersionSaveRequest } from "@/context/WorkspaceContext";
+import { SaveRequest as VersionSaveRequest } from "@/context/WorkspaceContext";
 import { formatDistanceToNow } from "date-fns";
 
 interface Props {
