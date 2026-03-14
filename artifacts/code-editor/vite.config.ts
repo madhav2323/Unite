@@ -41,6 +41,7 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "src"),
       "@assets": path.resolve(__dirname, "..", "..", "attached_assets"),
+      "@workspace/api-client-react": path.resolve(__dirname, "src/lib/api-client"),
     },
     dedupe: ["react", "react-dom"],
   },
