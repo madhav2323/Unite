@@ -1,0 +1,9 @@
+{
+  "buildCommand": "BASE_PATH=/ pnpm --filter @workspace/code-editor run build",
+  "outputDirectory": "artifacts/code-editor/dist/public",
+  "installCommand": "pnpm install",
+  "framework": null,
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

@@ -185,7 +185,8 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
 
   function getSocket(): Socket {
     if (!socketRef.current) {
-      const sock = io(window.location.origin, {
+      const backendUrl = import.meta.env.VITE_SOCKET_URL || window.location.origin;
+      const sock = io(backendUrl, {
         path: "/api/socket.io",
         transports: ["websocket", "polling"],
       });
